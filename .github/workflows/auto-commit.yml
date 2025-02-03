@@ -135,8 +135,7 @@ jobs:
  echo "$(date)" >> hello.php
  echo "$(date)" >> hello.php
           echo "$(date)" >> hello.rs
-
-      - name: Configure Git
+- name: Configure Git
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "github-actions@github.com"
