@@ -17,133 +17,45 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Files with Timestamp
+      - name: Configure Git
         run: |
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
- echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
- echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
- echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
- echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
- echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
-          echo "$(date)" >> hello.py
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Commit Other Languages (Once)
+        run: |
           echo "$(date)" >> hello.js
           echo "$(date)" >> Hello.java
           echo "$(date)" >> hello.cpp
           echo "$(date)" >> hello.sh
           echo "$(date)" >> hello.rb
           echo "$(date)" >> hello.html
-          echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
- echo "$(date)" >> hello.php
           echo "$(date)" >> hello.rs
-- name: Configure Git
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "Automated commit for all languages on $(date)" || exit 0
 
-      - name: Commit and Push Changes
+      - name: Commit PHP 20 Times
+        run: |
+          for i in {1..20}; do
+            echo "$(date) - PHP Commit $i" >> hello.php
+            git add hello.php
+            git commit -m "Automated PHP commit $i on $(date)"
+          done
+
+      - name: Commit Python 40 Times
+        run: |
+          for i in {1..40}; do
+            echo "$(date) - Python Commit $i" >> hello.py
+            git add hello.py
+            git commit -m "Automated Python commit $i on $(date)"
+          done
+
+      - name: Pull Latest Changes
+        run: |
+          git pull origin main --rebase || true
+
+      - name: Push Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git add .
-          git commit -m "Automated commit on $(date)" || exit 0
           git push origin main
