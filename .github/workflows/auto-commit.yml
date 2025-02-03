@@ -1,8 +1,12 @@
 name: Daily Multi-Language Commit
 
 on:
+  workflow_dispatch:  # Allows manual trigger
+  push:
+    branches:
+      - main
   schedule:
-    - cron: "0 12 * * *"  # Runs every day at 12:00 UTC
+    - cron: "0 12 * * *"  # Runs daily at 12:00 UTC
 
 jobs:
   commit:
@@ -11,18 +15,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate Language-Specific Files
+      - name: Update Files with Timestamp
         run: |
-          echo "$(date)" >> activity.log
-          echo "print('Hello from Python!')" >> hello.py
-          echo "console.log('Hello from JavaScript!');" >> hello.js
-          echo "public class Hello { public static void main(String[] args) { System.out.println('Hello from Java!'); } }" > Hello.java
-          echo "#include <iostream>\nint main() { std::cout << 'Hello from C++!'; return 0; }" > hello.cpp
-          echo "echo 'Hello from Bash!'" > hello.sh
-          echo "puts 'Hello from Ruby!'" > hello.rb
-          echo "<!DOCTYPE html><html><body><h1>Hello from HTML!</h1></body></html>" > hello.html
-          echo "<?php echo 'Hello from PHP!'; ?>" > hello.php
-          echo "fn main() { println!(\"Hello from Rust!\"); }" > hello.rs
+          echo "$(date)" >> hello.py
+          echo "$(date)" >> hello.js
+          echo "$(date)" >> Hello.java
+          echo "$(date)" >> hello.cpp
+          echo "$(date)" >> hello.sh
+          echo "$(date)" >> hello.rb
+          echo "$(date)" >> hello.html
+          echo "$(date)" >> hello.php
+          echo "$(date)" >> hello.rs
 
       - name: Configure Git
         run: |
