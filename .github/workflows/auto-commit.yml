@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: "0 12 * * 1"  # Runs every Monday to shuffle commit days
     - cron: "0 12 * * *"  # Runs daily but commits only on selected days
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   shuffle_days:
@@ -18,20 +18,18 @@ jobs:
       - name: Select 4 Random Commit Days
         id: select-days
         run: |
-          # Shuffle numbers 1-7 (Monday-Sunday) and pick 4 unique days
           DAYS=$(shuf -i 1-7 -n 4 | tr '\n' ' ')
-          echo "Selected commit days: $DAYS"
           echo "days=$DAYS" >> $GITHUB_ENV
           echo "$DAYS" > commit_days.txt
 
       - name: Save Days to Repository
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "github-actions@github.com"
+          git config --global user.name "Kollipunith"
+          git config --global user.email "kollipunith@gmail.com"
           git add commit_days.txt
           git commit -m "Updated commit schedule for the week" || exit 0
-          git pull origin main --rebase || true
-          git push origin main || true
+          git pull origin main
+          git push origin main
 
   commit:
     needs: shuffle_days
@@ -45,7 +43,7 @@ jobs:
       - name: Load Selected Commit Days
         run: |
           COMMIT_DAYS=$(cat commit_days.txt)
-          TODAY=$(date +%u) # Get today's weekday (1=Monday, 7=Sunday)
+          TODAY=$(date +%u)
           echo "Today's day: $TODAY"
           echo "Commit days: $COMMIT_DAYS"
 
@@ -58,43 +56,22 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "github-actions@github.com"
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your-email@example.com"
 
-      - name: Commit Other Languages (Once)
+      - name: Commit Changes
         run: |
-          echo "$(date)" >> hello.js
-          echo "$(date)" >> Hello.java
-          echo "$(date)" >> hello.cpp
-          echo "$(date)" >> hello.sh
-          echo "$(date)" >> hello.rb
-          echo "$(date)" >> hello.html
-          echo "$(date)" >> hello.rs
+          echo "$(date)" >> hello.py
+          echo "$(date)" >> hello.php
           git add .
-          git commit -m "Random automated commit for all languages on $(date)" || exit 0
-
-      - name: Commit PHP 20 Times
-        run: |
-          for i in {1..20}; do
-            echo "$(date) - PHP Commit $i" >> hello.php
-            git add hello.php
-            git commit -m "Random PHP commit $i on $(date)"
-          done
-
-      - name: Commit Python 40 Times
-        run: |
-          for i in {1..40}; do
-            echo "$(date) - Python Commit $i" >> hello.py
-            git add hello.py
-            git commit -m "Random Python commit $i on $(date)"
-          done
+          git commit -m "Random commit on $(date)" || exit 0
 
       - name: Pull Latest Changes
         run: |
-          git pull origin main --rebase || true
+          git pull origin main
 
       - name: Push Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push origin main || true
+          git push origin main
