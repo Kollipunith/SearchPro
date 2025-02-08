@@ -66,9 +66,11 @@ jobs:
           git add .
           git commit -m "Random commit on $(date)" || exit 0
 
-      - name: Pull Latest Changes
-        run: |
-          git pull origin main
+      - name: Pull Latest Changes with Rebase
+  run: |
+    git config --global pull.rebase true
+    git pull --rebase origin main || true
+
 
       - name: Push Changes
         env:
